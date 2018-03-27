@@ -12,6 +12,7 @@ contract Campaign {
     // address[] public approvers;  
     mapping (address=>bool) approvers;  // List of addresses for every person who has donated money
     Request[] public requests;          // List of requests that the manager has created.
+    uint public approversCount;         // Indicate total number of donators/apporvers.
 
     /**
      * Represent a Request creted by manager for making payment to other verndors to provide required good or services
@@ -50,6 +51,7 @@ contract Campaign {
         // approvers.push(msg.sender);
         approvers[msg.sender] = true;
         
+        approversCount++;
         // TODO: Keep the sender's value into Approver's Funds Hashtable
     }
     
@@ -89,5 +91,23 @@ contract Campaign {
         request.approvalCount++;
     }
 
-    // TODO: Create `finaliseRequest` method.
+    /**
+     * After a request has gotten enough approvals, the manager can call this to get money sent to the vendor.
+     * A request is eligible to be finalised if there are more than 50 % of total donators approved this Request.
+     */
+    function finaliseRequest(uint index) public restricted {
+      Request storage request = requests[index];
+
+      // Check if number of votes on this request is higher than 50% of total donators.
+      require(request.approvalCount > approversCount);
+
+      // Check if the request has not been set as completed
+      require(!request.complete);
+
+      // Send the money to Request's recipient
+      request.recipient.transfer(request.value);
+
+      // Set the request as completed
+      request.complete = true;
+    }
 }
