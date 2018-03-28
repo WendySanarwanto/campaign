@@ -15,7 +15,7 @@ contract Campaign {
     uint public approversCount;         // Indicate total number of donators/apporvers.
 
     /**
-     * Represent a Request creted by manager for making payment to other verndors to provide required good or services
+     * Represent a Request created by manager for making payment to other verndors to provide required good or services
      * to be used for building the  product.
      */
     struct Request {
@@ -35,8 +35,8 @@ contract Campaign {
     /**
      * Constructor function that sets the minimumContribution and the Owner
      */
-    function Campaign(uint minimumContrib) public {
-        manager = msg.sender;
+    function Campaign(uint minimumContrib, address creator) public {
+        manager = creator;
         minimumContribution = minimumContrib;
     }
     
