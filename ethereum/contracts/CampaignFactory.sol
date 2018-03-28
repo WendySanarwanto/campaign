@@ -1,6 +1,6 @@
 pragma solidity ^0.4.17;
 
-import "./Campaign.sol";
+import { Campaign } from "./Campaign.sol";
 
 contract CampaignFactory {
     address[] public deployedCampaigns;
