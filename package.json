@@ -1,0 +1,30 @@
+{
+  "name": "campaign",
+  "version": "0.0.1",
+  "description": "An exercise sample taken from section 5 and 6 of Udemy's \"Ethereum and Solidity, the complete developers guide\" course, created by Stephen Grider.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WendySanarwanto/campaign.git"
+  },
+  "keywords": [
+    "ethereum",
+    "solidity"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WendySanarwanto/campaign/issues"
+  },
+  "homepage": "https://github.com/WendySanarwanto/campaign#readme",
+  "dependencies": {
+    "fs-extra": "^5.0.0",
+    "ganache-cli": "^6.1.0",
+    "jest": "^22.4.3",
+    "solc": "^0.4.21",
+    "web3": "^1.0.0-beta.33"
+  }
+}
