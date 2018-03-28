@@ -96,18 +96,18 @@ contract Campaign {
      * A request is eligible to be finalised if there are more than 50 % of total donators approved this Request.
      */
     function finaliseRequest(uint index) public restricted {
-      Request storage request = requests[index];
+        Request storage request = requests[index];
 
-      // Check if number of votes on this request is higher than 50% of total donators.
-      require(request.approvalCount > approversCount);
+        // Check if number of votes on this request is higher than 50% of total donators.
+        require(request.approvalCount > approversCount);
 
-      // Check if the request has not been set as completed
-      require(!request.complete);
+        // Check if the request has not been set as completed
+        require(!request.complete);
 
-      // Send the money to Request's recipient
-      request.recipient.transfer(request.value);
+        // Send the money to Request's recipient
+        request.recipient.transfer(request.value);
 
-      // Set the request as completed
-      request.complete = true;
+        // Set the request as completed
+        request.complete = true;
     }
 }
