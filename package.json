@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "node ethereum/compile.js",
-    "test": "npm run test"
+    "test": "jest ./test"
   },
   "repository": {
     "type": "git",
