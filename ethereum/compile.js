@@ -32,12 +32,9 @@ const outputKeys = Object.keys(output);
 
 // console.log(`[DEBUG] - outputKeys: \n`, outputKeys);
 
-for(const key of outputKeys) {
-  const colonIndex = key.indexOf(':');
-  const fileName = key.substr(colonIndex+1, key.length-colonIndex) + '.json';
+for (const contract in output) {
+  const colonIndex = contract.indexOf(':');
+  const fileName = contract.substr(colonIndex+1, contract.length-colonIndex) + '.json';
   const filePath = path.resolve(buildPath, fileName);
-  fs.outputJsonSync(
-    filePath,
-    output[key]
-  );
+  fs.outputJsonSync( filePath, output[contract]);
 }
