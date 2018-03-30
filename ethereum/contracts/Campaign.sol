@@ -10,7 +10,7 @@ contract Campaign {
     //       Thus, it's expensive. Solution: Replace dynamic array with Mapping, because finding item will
     //       take constant amount of time, regardless of how many amount of items within the mapping.
     // address[] public approvers;  
-    mapping (address=>bool) approvers;  // List of addresses for every person who has donated money
+    mapping (address=>bool) public approvers;  // List of addresses for every person who has donated money
     Request[] public requests;          // List of requests that the manager has created.
     uint public approversCount;         // Indicate total number of donators/apporvers.
 
