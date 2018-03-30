@@ -1,3 +1,5 @@
+require('events').EventEmitter.prototype._maxListeners = 100; // Suppress MaxListenersExceededWarning
+
 const assert = require('assert');
 const ganache = require('ganache-cli');
 const Web3 = require('web3');
@@ -34,7 +36,8 @@ beforeEach(async()=>{
     }); 
 
   // Get deployed campaign contract's addresses
-  [campaignAddress] = await factory.methods.getDeployedCampaigns().call();  
+  // Note - This raise MaxListenersExceededWarning when running the test.
+  [campaignAddress] = await factory.methods.getDeployedCampaigns().call();
 
   // Create interface instance to the deployed Campaign's contract
   campaign = await new web3.eth.Contract(
@@ -44,7 +47,8 @@ beforeEach(async()=>{
 });
 
 describe('Campaign', () => {
-  it('Deploy', async() =>{
-    // TODO: Implement this
+  it('deploy campaign factory and factory contracts', async() =>{
+    assert.ok(factory.options.address);
+    assert.ok(campaign.options.address);
   });
 });
