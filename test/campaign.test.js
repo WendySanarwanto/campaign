@@ -51,4 +51,16 @@ describe('Campaign', () => {
     assert.ok(factory.options.address);
     assert.ok(campaign.options.address);
   });
+
+  it(`marks campaign contract's creator as the campaign's manager`, async() => {
+    const manager = await campaign.methods.manager().call();
+    assert.equal(manager, accounts[0]);
+  });
+
+  it(`allows people to contribute money and marks them as approvers`, async() => {
+    await campaign.methods.contribute()
+      .send({ from: accounts[1], value: web3.utils.toWei('0.2', 'ether') });
+
+    assert.equal( await campaign.methods.approvers(accounts[1]).call(), true);
+  });
 });
