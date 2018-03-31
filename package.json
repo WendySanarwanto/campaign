@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "node ethereum/compile.js",
+    "dev": "next dev",
     "deploy": "node ethereum/deploy.js",
     "test": "jest ./test"
   },
@@ -26,6 +27,9 @@
     "fs-extra": "^5.0.0",
     "ganache-cli": "^6.1.0",
     "jest": "^22.4.3",
+    "next": "^5.1.0",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
     "solc": "^0.4.21",
     "truffle-hdwallet-provider": "0.0.3",
     "web3": "^1.0.0-beta.33"
