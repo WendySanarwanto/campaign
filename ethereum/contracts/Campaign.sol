@@ -11,6 +11,7 @@ contract Campaign {
     //       take constant amount of time, regardless of how many amount of items within the mapping.
     // address[] public approvers;  
     mapping (address=>bool) public approvers;  // List of addresses for every person who has donated money
+    mapping (address=>uint) public donatedMoney; // List of donated money mapped to the contributor
     Request[] public requests;          // List of requests that the manager has created.
     uint public approversCount;         // Indicate total number of donators/apporvers.
 
@@ -48,11 +49,12 @@ contract Campaign {
         require(msg.value > minimumContribution);
         
         // Keep the sender's address into approvers.
-        // approvers.push(msg.sender);
-        approvers[msg.sender] = true;
-        
-        approversCount++;
-        // TODO: Keep the sender's value into Approver's Funds Hashtable
+        if (!approvers[msg.sender]) {
+            approvers[msg.sender] = true;            
+            approversCount++;
+        }
+        // Keep the sender's value into Approver's Funds Hashtable
+        donatedMoney[msg.sender] = msg.value;
     }
     
     /** 
