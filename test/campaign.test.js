@@ -73,4 +73,20 @@ describe('Campaign', () => {
     }
   });
 
+  it(`allows a manager to make a payment request`, async() => {
+    const description = `Buy Battery`;
+    const value = 200;
+
+    await campaign.methods.createRequest(description, value, accounts[2])
+      .send({
+        from: accounts[0],
+        gas: GAS_LIMIT
+      });
+
+    const request = await campaign.methods.requests(0).call();
+    // console.log(`[DEBUG] - request: \n`, request);
+    assert.equal(request.description, description);
+    assert.equal(request.value, value);
+  });
+
 });
