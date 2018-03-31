@@ -99,7 +99,7 @@ contract Campaign {
         Request storage request = requests[index];
 
         // Check if number of votes on this request is higher than 50% of total donators.
-        require(request.approvalCount > approversCount);
+        require(request.approvalCount > approversCount/2);
 
         // Check if the request has not been set as completed
         require(!request.complete);

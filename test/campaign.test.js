@@ -1,4 +1,4 @@
-require('events').EventEmitter.prototype._maxListeners = 100; // Suppress MaxListenersExceededWarning
+require('events').EventEmitter.prototype._maxListeners = 1000; // Suppress MaxListenersExceededWarning
 
 const assert = require('assert');
 const ganache = require('ganache-cli');
@@ -47,6 +47,7 @@ beforeEach(async()=>{
 });
 
 describe('Campaign', () => {
+
   it('deploy campaign factory and factory contracts', async() =>{
     assert.ok(factory.options.address);
     assert.ok(campaign.options.address);
@@ -81,12 +82,63 @@ describe('Campaign', () => {
       .send({
         from: accounts[0],
         gas: GAS_LIMIT
-      });
+      });    
 
     const request = await campaign.methods.requests(0).call();
-    // console.log(`[DEBUG] - request: \n`, request);
     assert.equal(request.description, description);
     assert.equal(request.value, value);
+  });
+
+  it(`process a payment request`, async() => {
+    const manager = accounts[0];
+    const contributor = accounts[1];
+    const vendor = accounts[3];
+    const initialVendorBalance = parseInt(await web3.eth.getBalance(vendor));
+
+    // A user contribute their money
+    const money = web3.utils.toWei('10', 'ether');
+    await campaign.methods.contribute()
+      .send({
+        from: contributor,
+        value: money
+      });
+
+    // Manager creates a payment request
+    const description = `Buy Battery`;
+    const value = web3.utils.toWei('1', 'ether');
+    await campaign.methods.createRequest(description, value, vendor)
+      .send({
+        from: manager,
+        gas: GAS_LIMIT
+      });
+
+    // Contributor approve request
+    await campaign.methods.approveRequest(0)
+      .send({
+        from: contributor,
+        gas: GAS_LIMIT
+      });
+
+    // Manager finalise the approved request
+    await campaign.methods.finaliseRequest(0)
+      .send({
+        from: manager,
+        gas: GAS_LIMIT
+      });
+
+    // Assert request
+    const request = await campaign.methods.requests(0).call();
+    assert.equal(request.description, description);
+    assert.equal(request.value, value);
+    assert.equal(request.complete, true);
+
+    // Assert whether the recipient got the money
+    let vendorBalance = await web3.eth.getBalance(vendor);
+    vendorBalance = web3.utils.fromWei(vendorBalance, `ether`);
+    vendorBalance = parseFloat(vendorBalance);
+    
+    const expectedVendorBalance = web3.utils.fromWei((initialVendorBalance + parseInt(value)).toString(), 'ether');
+    assert.equal(vendorBalance, expectedVendorBalance);
   });
 
 });
