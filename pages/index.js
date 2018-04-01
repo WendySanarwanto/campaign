@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
+import {Card} from 'semantic-ui-react';
 import campaignFactory from '../ethereum/client/campaign-factory';
 
 export default class CampaignIndex extends Component {
 
   //#region Load the data on server side
   
+  renderCampaigns() {
+    const items = this.props.campaigns.map(campaign => {
+      return {
+        header: campaign,
+        description: <a>View Campaign</a>,
+        fluid: true
+      };
+    });
+
+    return <Card.Group items={items} />;
+  }
+
   /**
    * We are using Next.js. Therefore, we would like to retrieve deployed campaigns from server side.
    */
@@ -17,7 +30,7 @@ export default class CampaignIndex extends Component {
    * Render this component.
    */
   render() {
-    return <h1>{this.props.campaigns[0]}</h1>;
+    return <div>{this.renderCampaigns()}</div>;
   }
   
   //#endregion
@@ -28,6 +41,18 @@ export default class CampaignIndex extends Component {
   //   campaigns: []
   // };
 
+  // renderCampaigns() {
+  //   const items = this.state.campaigns.map(campaign => {
+  //     return {
+  //       header: campaign,
+  //       description: <a>View Campaign</a>,
+  //       fluid: true
+  //     };
+  //   });
+
+  //   return <Card.Group items={items} />;
+  // }
+  
   // /**
   //  * Initialise deployed campaigns from front end side.
   // */
@@ -42,7 +67,7 @@ export default class CampaignIndex extends Component {
   //  * Render this component.
   //  */
   // render() {
-  //   return <h1>{this.state.campaigns[0]}</h1>;
+  //   return <div>{this.renderCampaigns()}</div>;
   // }
 
   //#endregion
