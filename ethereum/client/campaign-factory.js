@@ -1,4 +1,4 @@
-import web3 from '.web3';
+import web3 from './web3';
 import CampaignFactory from '../build/CampaignFactory.json';
 
 const CAMPAIGN_FACTORY_CONTRACT_ADDRESS = "0x2e839Fee7161b40b0F262d4303688674767E5fA5";
