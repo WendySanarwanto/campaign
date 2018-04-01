@@ -175,4 +175,66 @@ describe('Campaign', () => {
     assert.equal(currentContractBalance, 0);
     assert.ok(diffContributorBalance < contributedMoney);
   });
+
+  it(`allows contributor to top up their donation`, async() => {
+    const contributor = accounts[3];
+    let contributedMoney = web3.utils.toWei('0.5', 'ether');
+    let totalContributedMoney = contributedMoney;
+
+    // Donate initial contribution
+    await campaign.methods.contribute()
+      .send({ from: contributor, value: contributedMoney});
+
+    // Donate 2nd contribution
+    contributedMoney = web3.utils.toWei('0.2', 'ether');
+    await campaign.methods.contribute()
+      .send({ from: contributor, value: contributedMoney});
+    totalContributedMoney = (parseFloat(totalContributedMoney) + parseFloat(contributedMoney)).toString();
+
+    // Assert
+    const donatorsCount = await campaign.methods.approversCount().call();
+    const donatedMoney = await campaign.methods.donatedMoney(contributor).call();
+    assert.equal(donatorsCount, 1);
+    // console.log(`[DEBUG] - donatedMoney: ${web3.utils.fromWei(donatedMoney, 'ether')} ether, 
+    //              totalContributedMoney: ${web3.utils.fromWei(totalContributedMoney, 'ether')} ether.`);
+    assert.equal(donatedMoney, totalContributedMoney);
+  });
+
+  it(`should return a contributor's all donated money when the contributor claim refund`, async () => {
+    const contributor = accounts[3];
+    let contributedMoney = web3.utils.toWei('0.5', 'ether');
+    let totalContributedMoney = contributedMoney;
+    let initialContributorBalance = await web3.eth.getBalance(contributor);
+    initialContributorBalance = web3.utils.fromWei(initialContributorBalance, 'ether');
+
+    // Donate initial contribution
+    await campaign.methods.contribute()
+      .send({ from: contributor, value: contributedMoney});
+
+    // Donate 2nd contribution
+    contributedMoney = web3.utils.toWei('0.2', 'ether');
+    await campaign.methods.contribute()
+      .send({ from: contributor, value: contributedMoney});
+    totalContributedMoney = (parseFloat(totalContributedMoney) + parseFloat(contributedMoney)).toString();
+  
+    // Claim refund
+    await campaign.methods.claimFund()
+      .send({ from: contributor});
+    
+    // // Assert
+    let contributorBalance = await web3.eth.getBalance(contributor);
+    contributorBalance = web3.utils.fromWei(contributorBalance, 'ether');
+    let diffContributorBalance = (parseFloat(initialContributorBalance) - parseFloat(contributorBalance)).toString();
+    let contractBalance = await web3.eth.getBalance(campaign.options.address);
+    contractBalance = web3.utils.fromWei(contractBalance, 'ether');
+    const isContributor = await campaign.methods.approvers(contributor).call();
+    const currentDonatedMoney = await campaign.methods.donatedMoney(contributor).call();
+    const donatorsCount = await campaign.methods.approversCount().call();
+    
+    assert.equal(parseFloat(diffContributorBalance) < 0.01, true);
+    assert.equal(parseFloat(contractBalance), 0);
+    assert.equal(isContributor, false);
+    assert.equal(currentDonatedMoney, 0);
+    assert.equal(donatorsCount, 0);
+  });
 });

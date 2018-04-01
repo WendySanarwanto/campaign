@@ -53,8 +53,9 @@ contract Campaign {
             approvers[msg.sender] = true;            
             approversCount++;
         }
-        // Keep the sender's value into Approver's Funds Hashtable
-        donatedMoney[msg.sender] = msg.value;
+
+        // Keep the sender's value into Approver's Funds Mapping
+        donatedMoney[msg.sender] += msg.value;
     }
     
     /** 
