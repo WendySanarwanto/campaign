@@ -112,4 +112,20 @@ contract Campaign {
         // Set the request as completed
         request.complete = true;
     }
+
+    /**
+     * Re-claim donated fund and also exit the donator.
+     */
+    function claimFund() public {
+        // Ensure that the sender is a donator of this campaign
+        require(approvers[msg.sender]);
+
+        // Send donated money back to the contributor        
+        msg.sender.transfer(donatedMoney[msg.sender]);
+
+        // Deactivate the contributor
+        approvers[msg.sender] = false;
+        donatedMoney[msg.sender] = 0;
+        approversCount--;
+    }
 }

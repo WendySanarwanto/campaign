@@ -141,4 +141,38 @@ describe('Campaign', () => {
     assert.equal(vendorBalance, expectedVendorBalance);
   });
 
+  it(`let contributor re-claim their donated fund`, async() => {
+    const contributor = accounts[1];
+    const contributedMoney = web3.utils.toWei('1', 'ether');
+    let initialContributorBalance = await web3.eth.getBalance(contributor);
+    initialContributorBalance = web3.utils.fromWei(initialContributorBalance, 'ether');
+    // console.log(`[DEBUG] - contributorBalance (before making donation): ${initialContributorBalance} ether.`);
+
+    // Contribute money
+    await campaign.methods.contribute()
+      .send({ from: contributor, value: contributedMoney});
+
+    let contributorBalance = await web3.eth.getBalance(contributor);
+    contributorBalance = web3.utils.fromWei(contributorBalance, 'ether');
+    // console.log(`[DEBUG] - contributorBalance (after contribute): ${contributorBalance} ether.`);  
+
+    // Assert contract's balance
+    let currentContractBalance = await web3.eth.getBalance(campaign.options.address);
+    assert.equal(currentContractBalance, contributedMoney);
+
+    // Re-claim fund
+    await campaign.methods.claimFund().send({
+      from: contributor
+    });
+    currentContractBalance = await web3.eth.getBalance(campaign.options.address);
+    contributorBalance = await web3.eth.getBalance(contributor);
+    contributorBalance = web3.utils.fromWei(contributorBalance, 'ether');
+    // console.log(`[DEBUG] - contributorBalance (after refund): ${contributorBalance} ether.`);
+
+    const diffContributorBalance = parseFloat(initialContributorBalance) - parseFloat(contributorBalance);
+    // console.log(`[DEBUG] - diffContributorBalance: ${diffContributorBalance}`);
+
+    assert.equal(currentContractBalance, 0);
+    assert.ok(diffContributorBalance < contributedMoney);
+  });
 });
