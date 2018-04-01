@@ -48,7 +48,7 @@ beforeEach(async()=>{
 
 describe('Campaign', () => {
 
-  it('deploy campaign factory and factory contracts', async() =>{
+  it('deploy campaign factory and factory contracts', () =>{
     assert.ok(factory.options.address);
     assert.ok(campaign.options.address);
   });
