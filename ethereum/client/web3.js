@@ -9,7 +9,7 @@ if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
 
   // Instantiate web3 instance through hijacking Metamask's current provider.
   web3 = new Web3(window.web3.currentProvider);
-} else {
+} else if (process.env.RINKEBY_NODE_URL && process.env.RINKEBY_NODE_URL !== '') {
   // We are on the server *OR* the user is not running metamask.
 
   // Instantiate web3 instance through using HttpProvider with Infura valid URL
@@ -17,6 +17,6 @@ if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
     process.env.RINKEBY_NODE_URL
   );
   web3 = new Web3(httpProvider);
-}
+} else throw new Error('No Infura-Rinkeby Node URL is defined. ');
 
 export default web3;
