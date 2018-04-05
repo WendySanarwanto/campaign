@@ -32,13 +32,13 @@ export default class CampaignIndex extends Component {
    */
   render() {
     return (
-      <Layout>
-        <div>
+      <div>
+        <Layout>
           <h3>Open Campaign</h3>
           <Button content="Create Campaign" icon="add circle" primary={true} floated="right"/>
           {this.renderCampaigns()}
-        </div>
-      </Layout>
+        </Layout>
+      </div>
     );
   }
   
