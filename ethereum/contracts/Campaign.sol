@@ -129,4 +129,24 @@ contract Campaign {
         donatedMoney[msg.sender] = 0;
         approversCount--;
     }
+
+    /**
+     * Get summarised info of current contract instance
+    */
+    function getSummary() public view returns(uint, uint, uint, uint, address) {
+        return (
+            minimumContribution,
+            this.balance,
+            requests.length,
+            approversCount,
+            manager
+        );
+    }
+
+    /**
+     * Get length of requests list.
+    */
+    function getRequestsLength() public view returns(uint) {
+        return requests.length;
+    }
 }
