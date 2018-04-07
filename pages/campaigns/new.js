@@ -7,7 +7,8 @@ import web3 from '../../ethereum/client/web3';
 export default class CampaignNew extends Component {
   state = {
     minimumContribution: '',
-    errorMessage: ''
+    errorMessage: '',
+    loading: false
   };
 
   /**
@@ -17,6 +18,9 @@ export default class CampaignNew extends Component {
   onSubmit = async (event) => {
     // Prevent the browser from submitting the form (refresh page)
     event.preventDefault();
+
+    // Display loading spinning throbber and clear prior error message
+    this.setState({ loading: true, errorMessage: '' });
 
     try {
       // Get a list accounts from the web3 instance.
@@ -30,6 +34,8 @@ export default class CampaignNew extends Component {
         });
     } catch(err) {
       this.setState({ errorMessage: err.message });
+    } finally {
+      this.setState({ loading: false });
     }
   }
 
@@ -50,7 +56,7 @@ export default class CampaignNew extends Component {
           
           <Message error header='Oops' list={[this.state.errorMessage]} />
 
-          <Button primary>Create!</Button>
+          <Button loading={this.state.loading} primary>Create!</Button>
         </Form>
       </Layout>
     );
