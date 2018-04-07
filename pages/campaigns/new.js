@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Form, Button, Input, Message } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
+import { Router } from '../../routes';
+
 import factory from '../../ethereum/client/campaign-factory';
 import web3 from '../../ethereum/client/web3';
 
@@ -32,6 +34,9 @@ export default class CampaignNew extends Component {
         .send({
           from: accounts[0]
         });
+
+      // Redirect to landing view
+      Router.pushRoute(`/`);
     } catch(err) {
       this.setState({ errorMessage: err.message });
     } finally {
