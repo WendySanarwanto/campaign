@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Card } from 'semantic-ui-react';
-import campaignFactory from '../ethereum/client/campaign-factory';
 import Layout from '../components/Layout';
+import { Router } from '../routes';
+
+import campaignFactory from '../ethereum/client/campaign-factory';
 
 export default class CampaignIndex extends Component {
 
@@ -35,7 +37,8 @@ export default class CampaignIndex extends Component {
       <div>
         <Layout>
           <h3>Open Campaign</h3>
-          <Button content="Create Campaign" icon="add circle" primary={true} floated="right"/>
+          <Button content="Create Campaign" icon="add circle" primary={true} floated="right" 
+                  onClick={() => Router.pushRoute('/campaigns/new')}/>
           {this.renderCampaigns()}
         </Layout>
       </div>
