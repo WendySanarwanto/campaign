@@ -3,7 +3,7 @@ pragma solidity ^0.4.17;
 import { Campaign } from "./Campaign.sol";
 
 contract CampaignFactory {
-    address[] public deployedCampaigns;
+    address[] private deployedCampaigns;
 
     /**
      * Factory method for creating & deploying Campaign contract's instance.
