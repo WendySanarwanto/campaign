@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "node ethereum/compile.js",
-    "dev": "next dev",
+    "dev": "node server.js",
     "deploy": "node ethereum/deploy.js",
     "test": "jest ./test"
   },
@@ -28,6 +28,7 @@
     "ganache-cli": "^6.1.0",
     "jest": "^22.4.3",
     "next": "^5.1.0",
+    "next-routes": "^1.4.1",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
     "semantic-ui-css": "^2.3.1",
