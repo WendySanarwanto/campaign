@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
+import web3 from '../../ethereum/client/web3';
 
 import getCampaignContractInterface from '../../ethereum/client/getCampaignContractInterface';
 
@@ -46,19 +47,23 @@ export default class CampaignShow extends Component {
             meta: 'Address of Manager',
             description: 'The manager created this campaign and can create requests to withdraw money.',
             style: { overflowWrap: 'break-word' }
-        }/*, {
-            header: '',
-            meta: '',
-            description: ''
         }, {
-            header: '',
-            meta: '',
-            description: ''
+            header: `${web3.utils.fromWei(minimumContribution, 'ether')} ETH`,
+            meta: 'Minimum Contribution (ether)',
+            description: 'You must contribute at least this much ether to become an contributor.'
         }, {
-            header: '',
-            meta: '',
-            description: ''
-        }*/];
+            header: requestsLength,
+            meta: 'Number of Requests',
+            description: 'a request tries to withdraw money from the contract. Requests must be approved by contributors.'
+        }, {
+            header: contributorsCount,
+            meta: 'Number of Contributors',
+            description: 'Number of people who have already contributed to this campaign.'
+        }, {
+            header: `${web3.utils.fromWei(contractBalance, 'ether')} ETH`,
+            meta: 'Campaign Balance (Ether)',
+            description: 'The balance is how much money this campaign has left to spend.'
+        }];
 
         return <Card.Group items={items} />
     }
