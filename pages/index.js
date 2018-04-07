@@ -9,6 +9,14 @@ export default class CampaignIndex extends Component {
 
   //#region Load the data on server side
   
+  /**
+   * We are using Next.js. Therefore, we would like to retrieve deployed campaigns from server side.
+   */
+  static async getInitialProps() {
+    const campaigns = await campaignFactory.methods.getDeployedCampaigns().call();
+    return { campaigns };
+  }
+
   renderCampaigns() {
     const items = this.props.campaigns.map(campaignAddress => {
       return {
@@ -23,14 +31,6 @@ export default class CampaignIndex extends Component {
     });
 
     return <Card.Group items={items} />;
-  }
-
-  /**
-   * We are using Next.js. Therefore, we would like to retrieve deployed campaigns from server side.
-   */
-  static async getInitialProps() {
-    const campaigns = await campaignFactory.methods.getDeployedCampaigns().call();
-    return { campaigns };
   }
 
   /**
