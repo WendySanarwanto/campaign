@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Card } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 
 import getCampaignContractInterface from '../../ethereum/client/getCampaignContractInterface';
@@ -31,11 +32,43 @@ export default class CampaignShow extends Component {
         return {};
     }
 
+    renderCards() {
+        const {
+            minimumContribution,
+            contractBalance,
+            requestsLength,
+            contributorsCount,
+            managerAddress
+        } = this.props;
+
+        const items = [{
+            header: managerAddress,
+            meta: 'Address of Manager',
+            description: 'The manager created this campaign and can create requests to withdraw money.',
+            style: { overflowWrap: 'break-word' }
+        }/*, {
+            header: '',
+            meta: '',
+            description: ''
+        }, {
+            header: '',
+            meta: '',
+            description: ''
+        }, {
+            header: '',
+            meta: '',
+            description: ''
+        }*/];
+
+        return <Card.Group items={items} />
+    }
+
     render() {
         return (
             <div>
                 <Layout>
-                    <h1> Show Campaign! </h1>
+                    <h3> Campaign Shown</h3>
+                    {this.renderCards()}
                 </Layout>
             </div>
         )
