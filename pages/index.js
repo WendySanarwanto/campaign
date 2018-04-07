@@ -10,10 +10,14 @@ export default class CampaignIndex extends Component {
   //#region Load the data on server side
   
   renderCampaigns() {
-    const items = this.props.campaigns.map(campaign => {
+    const items = this.props.campaigns.map(campaignAddress => {
       return {
-        header: campaign,
-        description: <a>View Campaign</a>,
+        header: campaignAddress,
+        description:(
+          <Link route={`/campaigns/${campaignAddress}`}>
+            <a>View Campaign</a>
+          </Link>
+        ),
         fluid: true
       };
     });
