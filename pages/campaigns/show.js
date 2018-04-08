@@ -24,7 +24,8 @@ export default class CampaignShow extends Component {
                 contractBalance: campaignContractSummary[1],
                 requestsLength: campaignContractSummary[2],
                 contributorsCount: campaignContractSummary[3],
-                managerAddress: campaignContractSummary[4]
+                managerAddress: campaignContractSummary[4],
+                campaignAddress: campaignAddress
             };
         } catch(err) {
             console.log(`[ERROR] - <show.getInitialProps> details: \n`, err);
@@ -80,7 +81,7 @@ export default class CampaignShow extends Component {
                         </Grid.Column>
 
                         <Grid.Column width={6}>
-                            <ContributeForm />
+                            <ContributeForm campaignAddress={this.props.campaignAddress}/>
                         </Grid.Column>
                     </Grid>                    
                 </Layout>
