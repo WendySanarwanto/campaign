@@ -31,13 +31,13 @@ export default class RequestIndex extends Component {
       }
       console.log(`[DEBUG] - <RequestIndex.getInitialProps> requests: \n`, requests);
 
-      return { requests };
+      return { campaignAddress, requests };
     } catch(err){
       console.log(`[ERROR] - <RequestIndex.getInitialProps> details: \n`, err);
       return { errorMessage: err.message }
     }
 
-    return {};
+    return { campaignAddress };
   }
 
   render(){
