@@ -82,11 +82,14 @@ export default class RequestIndex extends Component {
           <h3>Pending Requests</h3>
           <Link route={`/campaigns/${this.props.campaignAddress}/requests/new`}>
             <a>
-              <Button primary>Add Request</Button>
+              <Button primary floated="right" 
+                      style={{ marginBottom: 10 }}>Add Request</Button>
             </a>
           </Link>
 
           {this.renderTables()}
+
+          <div>Found {this.props.requestsLength} requests</div>
         </Layout>
       </div>
     );
