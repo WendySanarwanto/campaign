@@ -14,13 +14,16 @@ export default class RequestIndex extends Component {
       const campaignContractInterface = await getCampaignContractInterface(campaignAddress);
 
       // Call Campaign contract's getRequestsLength method
-      const requestsLength = await campaignContractInterface.methods.getRequestsLength().call();
+      let requestsLength = await campaignContractInterface.methods.getRequestsLength().call();
+      requestsLength = parseInt(requestsLength);
       console.log(`[DEBUG] - <RequestIndex.getInitialProps> requestsLength: ${requestsLength}`);
 
       // Call Campaign contract's requests method specified by requests length
-      const requests = Array(requestsLength).fill().map((element, index) => {
-        return campaignContractInterface.methods.requests(index).call();
-      });
+      const requests = await Promise.all(
+        Array(requestsLength).fill().map((element, index) => {
+          return campaignContractInterface.methods.requests(index).call();
+        })
+      );
       console.log(`[DEBUG] - <RequestIndex.getInitialProps> requests: \n`, requests);
 
       return { campaignAddress, requests, requestsLength };
