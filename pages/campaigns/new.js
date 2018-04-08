@@ -24,6 +24,7 @@ export default class CampaignNew extends Component {
     // Display loading spinning throbber and clear prior error message
     this.setState({ loading: true, errorMessage: '' });
 
+    // TOOD: Move this into service class 
     try {
       // Get a list accounts from the web3 instance.
       const accounts = await web3.eth.getAccounts();
