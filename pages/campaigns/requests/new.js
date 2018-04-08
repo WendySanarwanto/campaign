@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, Input, Message } from 'semantic-ui-react';
 import Layout from '../../../components/Layout';
 import web3 from '../../../ethereum/client/web3';
-import { Router } from '../../../routes';
+import { Link, Router } from '../../../routes';
 
 import getCampaignContractInterface from '../../../ethereum/client/getCampaignContractInterface';
 
@@ -58,6 +58,10 @@ export default class RequestNew extends Component {
     return (
       <div>
         <Layout>
+          <Link route={`/campaigns/${this.props.campaignAddress}/requests`}>
+            <a>Back</a>
+          </Link>
+
           <h3>Create a Request</h3>
 
           <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
