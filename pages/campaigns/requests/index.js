@@ -18,17 +18,14 @@ export default class RequestIndex extends Component {
       console.log(`[DEBUG] - <RequestIndex.getInitialProps> requestsLength: ${requestsLength}`);
 
       // Call Campaign contract's requests method specified by requests length
-      const requests = [];
+      const requestsPromises = [];
+
       for(let index=0; index < requestsLength; index++) {
-        const request = await campaignContractInterface.methods.requests(index).call();
-        requests.push({
-          approvalCount: request.approvalCount,
-          complete: request.complete,
-          description: request.description,
-          recipient: request.recipient,
-          value: request.value
-        });
+        const requestPromise = campaignContractInterface.methods.requests(index).call();
+        requestsPromises.push(requestPromise);
       }
+
+      const requests = await Promise.all(requestsPromises);    
       console.log(`[DEBUG] - <RequestIndex.getInitialProps> requests: \n`, requests);
 
       return { campaignAddress, requests };
