@@ -23,7 +23,7 @@ export default class RequestIndex extends Component {
       });
       console.log(`[DEBUG] - <RequestIndex.getInitialProps> requests: \n`, requests);
 
-      return { campaignAddress, requests };
+      return { campaignAddress, requests, requestsLength };
     } catch(err){
       console.log(`[ERROR] - <RequestIndex.getInitialProps> details: \n`, err);
       return { errorMessage: err.message }
