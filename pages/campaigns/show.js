@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, Grid } from 'semantic-ui-react';
+import { Button, Card, Grid, Message } from 'semantic-ui-react';
 import ContributeForm from '../../components/ContributeForm';
 import Layout from '../../components/Layout';
 import web3 from '../../ethereum/client/web3';
@@ -15,11 +15,16 @@ export default class CampaignShow extends Component {
         try {
             // Get instance of Campaign contract's interface
             const campaignContractInterface = await getCampaignContractInterface(campaignAddress);
+            if (campaignContractInterface === null) {
+              throw new Error(`Web3 instance is not available. Have you installed Metamask yet ? 
+              Follow the instructions in this link to install Metamask on your Chrome or Firefox browser: https://metamask.io/`);
+            }
 
             // Call Campaign contract's getSummary method
             const campaignContractSummary = await campaignContractInterface.methods.getSummary().call();
 
             // Return the summary result
+            console.log(`[DEBUG] - <CampaignShow.getInitialProps> campaignContractSummary: \n`, campaignContractSummary);
             return {
                 minimumContribution: campaignContractSummary[0],
                 contractBalance: campaignContractSummary[1],
@@ -36,70 +41,79 @@ export default class CampaignShow extends Component {
         return {};
     }
 
-    renderCards() {
-        const {
-            minimumContribution,
-            contractBalance,
-            requestsLength,
-            contributorsCount,
-            managerAddress
-        } = this.props;
+  renderCards() {
+    const {
+        minimumContribution,
+        contractBalance,
+        requestsLength,
+        contributorsCount,
+        managerAddress
+    } = this.props;
 
-        const items = [{
-            header: managerAddress,
-            meta: 'Address of Manager',
-            description: 'The manager created this campaign and can create requests to withdraw money.',
-            style: { overflowWrap: 'break-word' }
-        }, {
-            header: `${web3.utils.fromWei(minimumContribution, 'ether')} ETH`,
-            meta: 'Minimum Contribution (ether)',
-            description: 'You must contribute at least this much ether to become an contributor.'
-        }, {
-            header: requestsLength,
-            meta: 'Number of Requests',
-            description: 'a request tries to withdraw money from the contract. Requests must be approved by contributors.'
-        }, {
-            header: contributorsCount,
-            meta: 'Number of Contributors',
-            description: 'Number of people who have already contributed to this campaign.'
-        }, {
-            header: `${web3.utils.fromWei(contractBalance, 'ether')} ETH`,
-            meta: 'Campaign Balance (Ether)',
-            description: 'The balance is how much money this campaign has left to spend.'
-        }];
+    const items = [{
+        header: managerAddress,
+        meta: 'Address of Manager',
+        description: 'The manager created this campaign and can create requests to withdraw money.',
+        style: { overflowWrap: 'break-word' }
+    }, {
+        header: `${web3.utils.fromWei(minimumContribution.toString(), 'ether')} ETH`,
+        meta: 'Minimum Contribution (ether)',
+        description: 'You must contribute at least this much ether to become an contributor.'
+    }, {
+        header: requestsLength,
+        meta: 'Number of Requests',
+        description: 'a request tries to withdraw money from the contract. Requests must be approved by contributors.'
+    }, {
+        header: contributorsCount,
+        meta: 'Number of Contributors',
+        description: 'Number of people who have already contributed to this campaign.'
+    }, {
+        header: `${web3.utils.fromWei(contractBalance.toString(), 'ether')} ETH`,
+        meta: 'Campaign Balance (Ether)',
+        description: 'The balance is how much money this campaign has left to spend.'
+    }];
 
-        return <Card.Group items={items} />
-    }
+    return <Card.Group items={items} />
+  }
 
-    render() {
-        return (
-            <div>
-                <Layout>
-                    <h3> Campaign Shown</h3>
-                    <Grid>
+  renderGrids = () => {
+    return (
+      <Grid>
 
-                        <Grid.Row>
-                            <Grid.Column width={10}>
-                                {this.renderCards()}                                                                                    
-                            </Grid.Column>
+        <Grid.Row>
+            <Grid.Column width={10}>
+                {this.renderCards()}                                                                                    
+            </Grid.Column>
 
-                            <Grid.Column width={6}>
-                                <ContributeForm campaignAddress={this.props.campaignAddress}/>
-                            </Grid.Column>
-                        </Grid.Row>
+            <Grid.Column width={6}>
+                <ContributeForm campaignAddress={this.props.campaignAddress}/>
+            </Grid.Column>
+        </Grid.Row>
 
-                        <Grid.Row>
-                            <Grid.Column>
-                                <Link route={`/campaigns/${this.props.campaignAddress}/requests`}>
-                                    <a>
-                                        <Button primary>View Requests</Button>
-                                    </a>
-                                </Link>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>                    
-                </Layout>
-            </div>
-        )
-    }
+        <Grid.Row>
+            <Grid.Column>
+                <Link route={`/campaigns/${this.props.campaignAddress}/requests`}>
+                    <a>
+                        <Button primary>View Requests</Button>
+                    </a>
+                </Link>
+            </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    );
+  }
+  
+  render() {
+    return (
+      <div>
+        <Layout>
+          <h3> Campaign Shown</h3>
+          { 
+            !!this.props.errorMessage ? ( <Message error header='Oops' list={[this.props.errorMessage]} /> )
+              : this.renderGrids()
+          }
+        </Layout>
+      </div>
+    )
+  }
 };
